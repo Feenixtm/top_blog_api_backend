@@ -1,4 +1,4 @@
-The Odin Project: Blog API
+The Odin Project: Blog API [BACKEND]
 
 Project Goals:
 - Actual Home Page (Doesn't require login/sign-up);
