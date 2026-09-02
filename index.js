@@ -12,8 +12,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/auth", authRouter);
-app.use("/blog", blogRouter);
-app.use("/comment", commentRouter);
+app.use("/blogs", blogRouter);
+app.use("/comments", commentRouter);
 
 const PORT = process.env.PORT || 5051;
 

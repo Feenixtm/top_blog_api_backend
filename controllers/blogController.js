@@ -1,3 +1,5 @@
+import { prisma } from "../lib/prisma.js";
+
 export const createBlog = async (req, res, next) => {
     try {
         
