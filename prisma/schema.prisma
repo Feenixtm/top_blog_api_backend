@@ -19,6 +19,7 @@ model User {
     password String
     blogPosts BlogPost[]
     comments Comment[]
+    canCreateBlogPosts Boolean
 }
 
 model BlogPost {
@@ -29,6 +30,7 @@ model BlogPost {
     authorId Int
     author User @relation(fields: [authorId], references: [id])
     comments Comment[]
+    isPublished Boolean
 }
 
 model Comment {
