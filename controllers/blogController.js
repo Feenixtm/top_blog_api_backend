@@ -51,6 +51,7 @@ export const getBlog = async (req, res, next) => {
 export const updateBlog = async (req, res, next) => {
     try {
         const blogId = Number(req.params.id);
+        
         const title = req.body.title;
         const content = req.body.content;
         const isPublished = req.body.isPublished;
