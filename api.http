@@ -6,3 +6,6 @@ Content-Type: application/json
     "username": "testUser",
     "password": "testpw"
 }
+
+###
+GET http://localhost:5050/blogs/

@@ -4,24 +4,32 @@ export const createBlog = async (req, res, next) => {
     try {
         const title = req.body.title;
         const content = req.body.content;
-        const authorId = req.body.authorId;
-        const isPublished = req.body.isPublished;
 
         const newBlog = await prisma.blogPost.create({
             data: {
                 title: title,
                 content: content,
-                authorId: authorId,
-                isPublished: isPublished
+                authorId: 1,
+                isPublished: true
             }
         });
 
-        res.json({ message: "Blog Post successfully created!", newBlog: newBlog });        
+        res.json({ message: "BLOG POST SUCCESSFULLY CREATED!", newBlog: newBlog });        
     } catch (error) {
         next(error);
     }
 };
 
+
+export const getAllBlogs = async (req, res, next) => {
+    try {
+        const allBlogs = await prisma.blogPost.findMany();
+
+        res.json({ message: "All Blogs successfully retrieved!", allBlogs: allBlogs });
+    } catch (error) {
+        next(error);
+    }
+}
 
 export const getBlog = async (req, res, next) => {
     try {

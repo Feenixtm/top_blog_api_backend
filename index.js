@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import dotenv from "dotenv";
 import blogRouter from "./routes/blogRouter.js";
 import commentRouter from "./routes/commentRouter.js";
@@ -6,6 +7,8 @@ import authRouter from "./routes/authRouter.js";
 dotenv.config();
 
 const app = express();
+
+app.use(cors());
 
 // Read JSON + Form Data
 app.use(express.json());
