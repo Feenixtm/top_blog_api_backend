@@ -8,4 +8,17 @@ Content-Type: application/json
 }
 
 ###
+POST http://localhost:5050/auth/login
+Content-Type: application/json
+
+{
+    "username": "testUser",
+    "password": "testpw"
+}
+
+###
 GET http://localhost:5050/blogs/
+
+###
+GET http://localhost:5050/secret
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RVc2VyIiwicGFzc3dvcmQiOiIkMmIkMTAkeUU2THhUVmkyOVFYZ2RTN1BjbElCTzYwMXV3OW1mRjByUGthVVp1TkVGS1ZmOEpJLmM1dEciLCJpYXQiOjE3ODg2NTAyMDh9.pd26nYaqEG53V5m1MvpCW-07Juebkx-jNACwlmLcG74

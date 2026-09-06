@@ -45,7 +45,7 @@ export const getBlog = async (req, res, next) => {
         });
 
         if (existingBlog) {
-            res.json({ message: "Blog successfully retrieved!", blog: existingBlog });
+            res.json({ message: "BLOG SUCCESSFULLY RETRIEVED!", blog: existingBlog });
         } else {
             res.json({ error: "Blog retrieval failed. This blog doesn't exist." });
         }        
