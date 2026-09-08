@@ -1,6 +1,6 @@
 import { prisma } from "../lib/prisma.js";
-import bcrypt, { hash } from "bcryptjs";
-import jwt, { TokenExpiredError } from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import dotenv from "dotenv"
 dotenv.config();
 
