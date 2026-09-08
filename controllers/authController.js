@@ -1,6 +1,6 @@
 import { prisma } from "../lib/prisma.js";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import bcrypt, { hash } from "bcryptjs";
+import jwt, { TokenExpiredError } from "jsonwebtoken";
 import dotenv from "dotenv"
 dotenv.config();
 
@@ -39,6 +39,10 @@ export const signUp = async (req, res, next) => {
 };
 
 
+/* Login JWT
+
+*/
+
 export const login = async (req, res, next) => {
     try {
         const username = req.body.username;
@@ -66,11 +70,29 @@ export const login = async (req, res, next) => {
 
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
-        const accessToken = jwt.sign({ username: username, password: hashedPassword }, process.env.JWT_ACCESS_TOKEN);
 
-        res.json({ accessToken: accessToken });
+        const user = { username: username, password: hashedPassword };
+
+        // New JWT Code (Below)
+        const accessToken = generateAccessToken(user);
+        const refreshToken = jwt.sign(user, process.env.JWT_REFRESH_TOKEN);
+
+
+        res.cookie('token', accessToken, {
+            httpOnly: true,
+            secure: "production",
+            sameSite: "strict",
+            maxAge: 3600000
+        });
+
+        return res.status(200).json({ message:"Login was successful! Enjoy your tokens!", accessToken: accessToken, refreshToken: refreshToken });
 
     } catch (error) {
         next(error);
     }
 };
+
+
+function generateAccessToken(user) {
+    return jwt.sign(user, process.env.JWT_ACCESS_TOKEN, { expiresIn: '30s' });
+}
