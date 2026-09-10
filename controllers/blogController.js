@@ -41,9 +41,21 @@ export const getBlog = async (req, res, next) => {
                 id: blogId
             },
             include: {
-                comments: true
+                comments: {
+                    include: {
+                        user: {
+                            select: {
+                                username: true
+                            }
+                        }
+                    }
+                },
+                
             }
         });
+
+        // console.log(existingBlog);
+        console.log(existingBlog.comments);
 
         if (existingBlog) {
             res.json({ message: "BLOG SUCCESSFULLY RETRIEVED!", blog: existingBlog });

@@ -3,19 +3,27 @@ import { prisma } from "../lib/prisma.js";
 // V.1 UNSURE ABOUT VARIABLES + :ID
 export const createComment = async (req, res, next) => {
     try {
-        const content = req.body.content;
-        const userId = req.body.userId;
-        const blogPostId = req.body.blogPostId;
+        const blogPostId = Number(req.body.blogPostId);
+        const commentAuthorName = req.body.commentAuthorName;
+        const commentContent = req.body.commentContent;
 
-        const newComment = await prisma.comment.create({
-            data: {
-                content: content,
-                userId: userId,
-                blogPostId: blogPostId 
+        const user = await prisma.user.findUnique({
+            where: {
+                username: commentAuthorName
             }
         });
 
-        res.json({ message: "Comment successfully created!", comment: newComment });
+        const newComment = await prisma.comment.create({
+            data: {
+                content: commentContent,
+                userId: user.id,
+                blogPostId: blogPostId
+            }
+        });
+
+        console.log(newComment);
+
+        // res.json({ message: "Comment successfully created!", comment: newComment });
 
     } catch (error) {
         next(error);
