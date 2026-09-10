@@ -1,5 +1,6 @@
 import express from "express";
 import * as blogController from "../controllers/blogController.js";
+import { authenticateToken } from "../middleware/auth.js";
 
 const blogRouter = express.Router();
 

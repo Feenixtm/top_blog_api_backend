@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv"
 dotenv.config();
 
-export const signUp = async (req, res, next) => {
+export const postSignUp = async (req, res, next) => {
     try {
         const username = req.body.username;
         const password = req.body.password;
@@ -31,7 +31,7 @@ export const signUp = async (req, res, next) => {
                 }
             });
 
-            res.json({ message:"Successful Sign Up!", user: newUser });
+            res.json({ message:"Sign-up was successful! Your account has been created!", user: newUser });
         }
     } catch (error) {
         next(error);
@@ -43,7 +43,7 @@ export const signUp = async (req, res, next) => {
 
 */
 
-export const login = async (req, res, next) => {
+export const postLogin = async (req, res, next) => {
     try {
         const username = req.body.username;
         const password = req.body.password;
@@ -75,7 +75,7 @@ export const login = async (req, res, next) => {
 
         // New JWT Code (Below)
         const accessToken = generateAccessToken(user);
-        const refreshToken = jwt.sign(user, process.env.JWT_REFRESH_TOKEN);
+        const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_KEY);
 
 
         res.cookie('token', accessToken, {
@@ -85,7 +85,7 @@ export const login = async (req, res, next) => {
             maxAge: 3600000
         });
 
-        return res.status(200).json({ message:"Login was successful! Enjoy your tokens!", accessToken: accessToken, refreshToken: refreshToken });
+        return res.status(200).json({ message:"Login was successful! Enjoy your tokens!", username: user.username });
 
     } catch (error) {
         next(error);
@@ -94,5 +94,44 @@ export const login = async (req, res, next) => {
 
 
 function generateAccessToken(user) {
-    return jwt.sign(user, process.env.JWT_ACCESS_TOKEN, { expiresIn: '30s' });
+    return jwt.sign(user, process.env.ACCESS_TOKEN_KEY, { expiresIn: '15m' });
+}
+
+export const getLogin = (req, res, next) => {
+    try {
+        res.json({ message: "Getting login...", user: req.user });
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const postLogOut = async (req, res, next) => {
+    try {
+        const username = req.body.username;
+        const user = await prisma.user.findUnique({
+            where: {
+                username: username
+            },
+            omit: {
+                id: true,
+                displayName: true,
+                canCreateBlogPosts: true
+            }
+        });
+
+        console.log(user);
+
+        const expiredToken = jwt.sign(user, process.env.ACCESS_TOKEN_KEY, { expiresIn: "0s" });
+
+        res.cookie("token", expiredToken, {
+            httpOnly: true,
+            secure: "production",
+            sameSite: "strict",
+            maxAge: 3600000
+        });
+
+        res.json({ message: "Successfully Logged Out!" });
+    } catch (error) {
+        next(error);
+    }
 }
